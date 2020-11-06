@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project 6</title>
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>The Last Game</h1>
+      <div>
+          <button id="newGame" class="button-newGame" type="button">New Game</button>
+          <button id="rules" class="button-rules" type="button" data-toggle="modal" data-target="#rulesModal">Rules</button>
+      </div>
+
+    </header>
+
+    <section class="board">
+      <div class="wrapper">
+        <div class="flex">
+          <aside id="player1" class="panel">
+            <div id="p1-avatar"></div>
+            <h4 id="p1-name"></h4>
+
+            <div class="box">
+              <p id="p1-health"></p>
+              <strong class="label">Health</strong>
+              
+            </div>
+
+            <div class="box">
+              <div id="p1-weapon-image"></div>
+              <strong id="p1-weapon-damage" class="label">0</strong>
+            </div>
+
+            <div class="box">
+              <div id="p1-shield-image"></div>
+              <strong id="p1-shield-status" class="label">Unprotected</strong>
+            </div>
+          </aside>
+
+          <main id="map" class="gameTable"></main>
+          
+          <aside id="player2" class="panel">
+            <div id="p2-avatar"></div>
+            <h4 id="p2-name"></h4>
+
+            <div class="box">    
+              <p id="p2-health"></p>
+              <strong class="label">Health</strong>
+            </div>
+
+            <div class="box">
+              <div id="p2-weapon-image"></div>
+              <strong id="p2-weapon-damage" class="label">0</strong>
+              <p></p>
+            </div>
+
+            <div class="box">
+              <div id="p2-shield-image"></div>
+              <strong id="p2-shield-status" class="label">Unprotected</strong>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <script src="./js/board.js"></script>
+  </body>
+</html>
