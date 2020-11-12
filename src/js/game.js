@@ -73,106 +73,66 @@ export default class Game {
     const row = Number(this.currentPlayer.position.row);
     const column = Number(this.currentPlayer.position.column);
 
-    
+    //loop to display movable spots
     // north
-    const north1 = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
-    const north2 = document.querySelector(`[data-row="${row - 2}"][data-column="${column}"]`);
-    const north3 = document.querySelector(`[data-row="${row - 3}"][data-column="${column}"]`);
-
-    if(north1) {
-      if(!north1.classList.contains("obstacle")) {
-        north1.classList.add('highlight');
-
-        if(north2) {
-          if(!north2.classList.contains("obstacle")) {
-            north2.classList.add('highlight');
-
-            if(north3) {
-              if(!north3.classList.contains("obstacle")) {
-                north3.classList.add('highlight');
-              }
-            }
-          }
+    for (let i = 1; i <= 3; i++) {
+      let north = document.querySelector(`[data-row="${row - i}"][data-column="${column}"]`);
+      if(row < 0){
+        break;//Break loop if we are out of the map, that is less than 0
+      }
+      if(north) {
+        if(north.classList.contains("obstacle") || north.classList.contains("player")) {
+          break;
+        }else{
+          north.classList.add('highlight');
         }
       }
     }
     
-    
-
-    
-
     //south
-    const south1 = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
-    const south2 = document.querySelector(`[data-row="${row + 2}"][data-column="${column}"]`);
-    const south3 = document.querySelector(`[data-row="${row + 3}"][data-column="${column}"]`);
-    
-    if(south1) {
-      if(!south1.classList.contains("obstacle")) {
-        south1.classList.add('highlight');
-
-        if(south2) {
-          if(!south2.classList.contains("obstacle")) {
-            south2.classList.add('highlight');
-
-            if(south3) {
-              if(!south3.classList.contains("obstacle")) {
-                south3.classList.add('highlight');
-              }
-            }
-          }
+    for (let i = 1; i <= 3; i++) {
+      let south = document.querySelector(`[data-row="${row + i}"][data-column="${column}"]`);
+      if(row < 0){
+        break;
+      }
+      if(south) {
+        if(south.classList.contains("obstacle") || south.classList.contains("player")) {
+          break;
+        }else{
+          south.classList.add('highlight');
         }
       }
     }
-    
     
     //east 
-    const east1 = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
-    const east2 = document.querySelector(`[data-row="${row}"][data-column="${column + 2}"]`);
-    const east3 = document.querySelector(`[data-row="${row}"][data-column="${column + 3}"]`);
-
-    if(east1) {
-      if(!east1.classList.contains("obstacle")) {
-        east1.classList.add('highlight');
-
-        if(east2) {
-          if(!east2.classList.contains("obstacle")) {
-            east2.classList.add('highlight');
-
-            if(east3) {
-              if(!east3.classList.contains("obstacle")) {
-                east3.classList.add('highlight');
-              }
-            }
-          }
+    for (let i = 1; i <= 3; i++) {
+      let east = document.querySelector(`[data-row="${row}"][data-column="${column + i}"]`);
+      if(row < 0){
+        break;
+      }
+      if(east) {
+        if(east.classList.contains("obstacle") || east.classList.contains("player")) {
+          break;
+        }else{
+          east.classList.add('highlight');
         }
       }
     }
-    
-    
+
     //west
-    const west1 = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
-    const west2 = document.querySelector(`[data-row="${row}"][data-column="${column - 2}"]`);
-    const west3 = document.querySelector(`[data-row="${row}"][data-column="${column - 3}"]`);
-
-    if(west1) {
-      if(!west1.classList.contains("obstacle")) {
-        west1.classList.add('highlight');
-
-        if(west2) {
-          if(!west2.classList.contains("obstacle")) {
-            west2.classList.add('highlight');
-
-            if(west3) {
-              if(!west3.classList.contains("obstacle")) {
-                west3.classList.add('highlight');
-              }
-            }
-          }
+    for (let i = 1; i <= 3; i++) {
+      let west = document.querySelector(`[data-row="${row}"][data-column="${column - i}"]`);
+      if(row < 0){
+        break;
+      }
+      if(west) {
+        if(west.classList.contains("obstacle") || west.classList.contains("player")) {
+          break;
+        }else{
+          west.classList.add('highlight');
         }
       }
-    }
-    
-    
+    } 
 
   } 
 
@@ -181,8 +141,6 @@ export default class Game {
       tile.innerHTML = "";
       tile.removeAttribute("class");
     }
-
-
   }
   
   placeItem = (item, type) => {
