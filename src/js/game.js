@@ -68,6 +68,16 @@ export default class Game {
 
   }
 
+  changeTurn = () => {
+    if(this.currentPlayer.id === 1) {
+      this.currentPlayer = this.players[1];
+    }else{
+      this.currentPlayer = this.players[0];
+    }
+
+    this.detectTurn()
+  }
+
   playerMoves = () => {
 
     const row = Number(this.currentPlayer.position.row);
@@ -85,6 +95,7 @@ export default class Game {
           break;
         }else{
           north.classList.add('highlight');
+          north.addEventListener('click', this.movePlayer);
         }
       }
     }
@@ -100,6 +111,7 @@ export default class Game {
           break;
         }else{
           south.classList.add('highlight');
+          south.addEventListener('click', this.movePlayer);
         }
       }
     }
@@ -115,6 +127,8 @@ export default class Game {
           break;
         }else{
           east.classList.add('highlight');
+          east.addEventListener('click', this.movePlayer);
+
         }
       }
     }
@@ -130,11 +144,42 @@ export default class Game {
           break;
         }else{
           west.classList.add('highlight');
+          west.addEventListener('click', this.movePlayer);
         }
       }
     } 
 
+
   } 
+
+  movePlayer = (e) => {
+    console.log(e);
+
+    const oldPos = document.querySelector(`[data-row="${this.currentPlayer.position.row}"][data-column="${this.currentPlayer.position.column}"]`);
+
+    const newPos = e.target.nodeName === "IMG" ? e.path[1] : e.target;
+
+
+    oldPos.innerHTML = '';
+    oldPos.removeAttribute('class');
+
+    newPos.innerHTML = this.currentPlayer.avatar;
+    newPos.classList.add('player');
+    newPos.classList.add('occupied');
+
+    this.players[this.currentPlayer.id - 1].position = {row: newPos.dataset.row, column: newPos.dataset.column}
+
+    for (const tile of document.querySelectorAll('.highlight')) {
+      tile.classList.remove('highlight');
+      tile.removeEventListener('click', this.movePlayer);
+      
+    };
+
+    this.changeTurn();
+
+
+
+  }
 
   reset = () => {
     for (const tile of this.mapTiles) {
