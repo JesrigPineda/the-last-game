@@ -13,7 +13,7 @@ export default class Player {
       avatar: `<img src="${this.avatar}"/>`,
       health: 100,
       position: { row: 0, colum: 0 },
-      weapon: { image: `<img src="${this.weapon}"/>`, damage: 10, old: null},
+      weapon: { image: `<img src="${this.weapon}" data-damage="10" />`, damage: 10, old: null},
       shield: false,
     };
   };
