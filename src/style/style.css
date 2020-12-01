@@ -176,9 +176,15 @@ body::-webkit-scrollbar-thumb {
   border: 0;
   font-size: 20px;
   border-radius: 15px;
+  cursor: pointer;
 }
 .modal ul {
-  margin: 0;
+  margin: 20px;
   padding: 0;
   list-style-type: none;
+}
+
+.modal ul li {
+  margin: 10px;
+  text-align: justify;
 }

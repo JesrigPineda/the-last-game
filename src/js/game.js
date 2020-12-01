@@ -192,6 +192,9 @@ export default class Game {
 
     if(this.detectFight()) {
       console.log('Start a fight...');
+
+      document.querySelector('#fightModal').classList.add('open'); 
+
       this.changeTurn();
 
     }else{
@@ -202,7 +205,37 @@ export default class Game {
   }
 
   detectFight = () => {
-    if(true) return true;
+
+    const row = Number(this.currentPlayer.position.row);
+    const column = Number(this.currentPlayer.position.column);
+
+    let north = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
+    if(north) {
+      if(north.classList.contains("player")) {
+        return true;
+      }
+    }
+
+    let south = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
+    if(south) {
+      if(south.classList.contains("player")) {
+        return true;
+      }
+    }
+   
+    let east = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
+    if(east) {
+      if(east.classList.contains("player")) {
+        return true;
+      }
+    }
+   
+   let west = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
+      if(west) {
+        if(west.classList.contains("player")) {
+          return true;
+        }
+      }
   }
 
   reset = () => {

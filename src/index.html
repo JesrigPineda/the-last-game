@@ -11,7 +11,7 @@
       <h1>The Last Game</h1>
       <div>
           <button id="newGame" class="button-newGame" type="button">New Game</button>
-          <button id="rules" class="button-rules" type="button">Rules</button>
+          <button id="rulesBtn" class="button-rules" type="button">Rules</button>
       </div>
 
     </header>
@@ -65,6 +65,24 @@
         </div>
       </div>
     </section>
+    <div id="rulesModal" class="modal">
+      <div>
+        <button id="closeRules">&times;</button>
+        <h2>Game Rules</h2> 
+        <ul>
+          <li>You can move a maximum  one to three boxes (horizontally or vertically) before ending your turn..</li>
+          <li>You can collect weapons and increase your damage score.</li>
+          <li>The aim of the game is to gain a high weapon damage score and attack the other player.</li>
+          <li>Once you are next to them you can attack or defend.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div id="fightModal" class="modal">
+      <div>
+          <h2>Fight!!</h2>
+      </div>
+    </div>
     <script src="./js/board.js"></script>
   </body>
 </html>

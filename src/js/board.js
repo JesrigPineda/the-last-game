@@ -8,6 +8,7 @@ const playerTwo = new Player('Dark', dark, sword, playerOne.id).generate();
 Game.mapGenerator();
 
 const game = new Game([playerOne, playerTwo]);
+
 // to start new game
 document.querySelector('#newGame').addEventListener('click', game.newGame);
 
