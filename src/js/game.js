@@ -1,4 +1,4 @@
-import { shield, torre, sword, axe} from './assets';
+import { shield, tower, gun, axe} from './assets';
 
 export default class Game {
 
@@ -43,10 +43,10 @@ export default class Game {
     }
     
     for (let index = 0; index < 15; index++) {
-      this.placeItem(`<img src="${torre}"/>`, 'obstacle')
+      this.placeItem(`<img src="${tower}"/>`, 'obstacle')
     }
-    this.placeItem(`<img src="${sword}"/>`, 'weapon')
-    this.placeItem(`<img src="${axe}"/>`, 'weapon')
+    this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
+    this.placeItem(`<img src="${gun}" data-damage="20" />`, 'weapon')
 
     this.currentPlayer = this.players[Math.floor(Math.random()*this.players.length)]
 
@@ -159,9 +159,24 @@ export default class Game {
 
     const newPos = e.target.nodeName === "IMG" ? e.path[1] : e.target;
 
-
-    oldPos.innerHTML = '';
     oldPos.removeAttribute('class');
+    if(this.currentPlayer.weapon.old) {
+     oldPos.innerHTML = this.currentPlayer.weapon.old;
+     oldPos.classList.add("weapon");
+
+     this.players[this.currentPlayer.id - 1].weapon.old = null; 
+    }else{
+     oldPos.innerHTML = '';
+    }
+
+    if(e.target.nodeName === "IMG") {
+      this.players[this.currentPlayer.id - 1].weapon = {image: e.target.outerHTML, damage: e.target.dataset.damage, old: this.currentPlayer.weapon.image};
+      document.querySelector(`#p${this.currentPlayer.id}-weapon-image`).innerHTML = e.target.outerHTML;
+      document.querySelector(`#p${this.currentPlayer.id}-weapon-damage`).innerHTML = e.target.dataset.damage;
+    }
+
+  
+
 
     newPos.innerHTML = this.currentPlayer.avatar;
     newPos.classList.add('player');
@@ -175,10 +190,19 @@ export default class Game {
       
     };
 
-    this.changeTurn();
+    if(this.detectFight()) {
+      console.log('Start a fight...');
+      this.changeTurn();
 
+    }else{
+      this.changeTurn();
 
+    }
 
+  }
+
+  detectFight = () => {
+    if(true) return true;
   }
 
   reset = () => {

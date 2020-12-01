@@ -5,6 +5,6 @@ import axe from '../img/axe.png';
 import gun from '../img/gun.png';
 import shield from '../img/shield.png';
 import sword from '../img/sword.png';
-import torre from '../img/torre.png';
+import tower from '../img/torre.png';
 
-export { allistar, dark, knife, axe, gun, shield, sword, torre };
+export { allistar, dark, knife, axe, gun, shield, sword, tower };
