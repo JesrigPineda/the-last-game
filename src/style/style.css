@@ -165,7 +165,19 @@ body::-webkit-scrollbar-thumb {
 .modal.open > div {
   transform: translateY(0) scale(1);
 }
-.modal button {
+
+.modal ul {
+  margin: 20px;
+  padding: 0;
+  list-style-type: none;
+}
+
+.modal ul li {
+  margin: 10px;
+  text-align: justify;
+}
+
+#rulesModal button {
   position: absolute;
   top: -15px;
   right: -15px;
@@ -178,13 +190,26 @@ body::-webkit-scrollbar-thumb {
   border-radius: 15px;
   cursor: pointer;
 }
-.modal ul {
-  margin: 20px;
-  padding: 0;
-  list-style-type: none;
+
+#avatar img {
+  height: 120px;
+}
+#fightModal button {
+  
+  background-color: red;
+  color: #fff;
+  
+  border: 0;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 30px;
+  text-transform: uppercase;
+  padding: 7px 15px;
 }
 
-.modal ul li {
-  margin: 10px;
-  text-align: justify;
+#fightModal button:last-of-type {
+  
+  background-color: black;
+
 }

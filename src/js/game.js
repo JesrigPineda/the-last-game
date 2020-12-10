@@ -24,6 +24,14 @@ export default class Game {
     }
   }
 
+  
+  reset = () => {
+    for (const tile of this.mapTiles) {
+      tile.innerHTML = "";
+      tile.removeAttribute("class");
+    }
+  }
+
   newGame = () => {
     this.reset();
 
@@ -52,6 +60,30 @@ export default class Game {
 
     this.detectTurn();
 
+  }
+
+  placeItem = (item, type) => {
+    // console.log(this.mapTiles)
+    
+    const randomNumber = Math.floor(Math.random()*81);
+    if( this.mapTiles[randomNumber].classList.contains("occupied"))
+    {
+      this.placeItem(item,type);
+    }else {
+      if(type === 'player') {
+        this.mapTiles[randomNumber].innerHTML = item.avatar;
+
+        const {row, column} = this.mapTiles[randomNumber].dataset
+
+        this.players[item.id - 1].position = {row, column};
+
+      }else{
+       this.mapTiles[randomNumber].innerHTML = item;
+
+      }
+       this.mapTiles[randomNumber].classList.add("occupied")
+       this.mapTiles[randomNumber].classList.add(type)
+    }
   }
 
   detectTurn = () =>{
@@ -153,7 +185,6 @@ export default class Game {
   } 
 
   movePlayer = (e) => {
-    console.log(e);
 
     const oldPos = document.querySelector(`[data-row="${this.currentPlayer.position.row}"][data-column="${this.currentPlayer.position.column}"]`);
 
@@ -191,11 +222,9 @@ export default class Game {
     };
 
     if(this.detectFight()) {
-      console.log('Start a fight...');
+      
 
-      document.querySelector('#fightModal').classList.add('open'); 
-
-      this.changeTurn();
+      this.fight();
 
     }else{
       this.changeTurn();
@@ -209,63 +238,63 @@ export default class Game {
     const row = Number(this.currentPlayer.position.row);
     const column = Number(this.currentPlayer.position.column);
 
-    let north = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
-    if(north) {
-      if(north.classList.contains("player")) {
-        return true;
-      }
-    }
+    const north = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
+    const south = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
+    const east = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
+    const west = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
 
-    let south = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
-    if(south) {
-      if(south.classList.contains("player")) {
-        return true;
-      }
-    }
+
+    if(north && north.classList.contains("player")) return true;
+
+    if(south && south.classList.contains("player")) return true;
    
-    let east = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
-    if(east) {
-      if(east.classList.contains("player")) {
-        return true;
-      }
-    }
+    if(east && east.classList.contains("player")) return true;
    
-   let west = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
-      if(west) {
-        if(west.classList.contains("player")) {
-          return true;
-        }
-      }
+    if(west && west.classList.contains("player")) return true;
   }
 
-  reset = () => {
-    for (const tile of this.mapTiles) {
-      tile.innerHTML = "";
-      tile.removeAttribute("class");
+  fight = () => {
+
+
+    console.log('Start a fight...');
+
+    document.querySelector('#fightModal').classList.add('open'); 
+    document.querySelector('#avatar').innerHTML = this.currentPlayer.id === 1 ? this.players[1].avatar : this.players[0].avatar; 
+
+    document.querySelector('#defend').addEventListener('click', () => {
+      const attacker = this.currentPlayer;
+      this.changeTurn();
+      const opponent = this.currentPlayer;
+
+      document.querySelector('#fightModal').classList.remove('open'); 
+      document.querySelector(`#p${opponent.id}-shield-status`).classList.add('protected'); 
+      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Protected'; 
+
+      opponent.shield = true;
+
+      const health = opponent.health - attacker.weapon.damage/2;
+
+      opponent.health = health;
+
+      document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
+
+      this.players[opponent.id -1] = opponent;
+
+      this.gameOver(health);
+
+    })
+
+
+
+  }
+
+  gameOver = (health) => {
+    if(health <= 99) {
+      document.querySelector('#gameOverModal').classList.add('open'); 
     }
   }
+
+
   
-  placeItem = (item, type) => {
-    // console.log(this.mapTiles)
-    
-    const randomNumber = Math.floor(Math.random()*81);
-    if( this.mapTiles[randomNumber].classList.contains("occupied"))
-    {
-      this.placeItem(item,type);
-    }else {
-      if(type === 'player') {
-        this.mapTiles[randomNumber].innerHTML = item.avatar;
-
-        const {row, column} = this.mapTiles[randomNumber].dataset
-
-        this.players[item.id - 1].position = {row, column};
-
-      }else{
-       this.mapTiles[randomNumber].innerHTML = item;
-
-      }
-       this.mapTiles[randomNumber].classList.add("occupied")
-       this.mapTiles[randomNumber].classList.add(type)
-    }
-  }
+  
 }
