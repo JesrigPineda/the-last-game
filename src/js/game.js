@@ -222,18 +222,8 @@ export default class Game {
     };
 
     if(this.detectFight()) {
-<<<<<<< HEAD
-      
-
+       
       this.fight();
-
-    }else{
-      this.changeTurn();
-
-    }
-=======
-      console.log('Start a fight...');
-      this.changeTurn();
 
     }else{
       this.changeTurn();
@@ -241,7 +231,6 @@ export default class Game {
     }
 
   }
->>>>>>> 71c44b2bd66dbc6982a5ec492bf99be949f0edb3
 
   detectFight = () => {
     if(true) return true;

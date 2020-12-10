@@ -165,7 +165,6 @@ body::-webkit-scrollbar-thumb {
 .modal.open > div {
   transform: translateY(0) scale(1);
 }
-<<<<<<< HEAD
 
 .modal ul {
   margin: 20px;
@@ -179,9 +178,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 #rulesModal button {
-=======
-.modal button {
->>>>>>> 71c44b2bd66dbc6982a5ec492bf99be949f0edb3
   position: absolute;
   top: -15px;
   right: -15px;
@@ -192,7 +188,6 @@ body::-webkit-scrollbar-thumb {
   border: 0;
   font-size: 20px;
   border-radius: 15px;
-<<<<<<< HEAD
   cursor: pointer;
 }
 
@@ -218,11 +213,3 @@ body::-webkit-scrollbar-thumb {
   background-color: black;
 
 }
-=======
-}
-.modal ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
->>>>>>> 71c44b2bd66dbc6982a5ec492bf99be949f0edb3
