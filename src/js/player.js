@@ -14,7 +14,6 @@ export default class Player {
       health: 100,
       position: { row: 0, colum: 0 },
       weapon: { image: `<img src="${this.weapon}" data-damage="10" />`, damage: 10, old: null},
-      shield: false,
     };
   };
 }

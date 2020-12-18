@@ -35,7 +35,7 @@
             </div>
 
             <div class="box">
-              <div id="p1-shield-image"></div>
+              <div id="p1-shield-image" class="shield-image"></div>
               <strong id="p1-shield-status" class="label">Unprotected</strong>
             </div>
           </aside>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="box">
-              <div id="p2-shield-image"></div>
+              <div id="p2-shield-image" class="shield-image"></div>
               <strong id="p2-shield-status" class="label">Unprotected</strong>
             </div>
           </aside>
@@ -77,16 +77,28 @@
         </ul>
       </div>
     </div>
-    
+  
     <div id="fightModal" class="modal">
       <div>
-          <h2>Fight!!</h2>
+          <h2>You are in a Fight!</h2>
           <div id="avatar"></div>
+
           <p>Defend: your health is going to be decreased by a 50%</p>
-          <p>Attack: your health is going to be decreased by a 100%</p>
+          <p>Attack: you are going to receive a full damage</p>
           <button id="defend">Defend</button>
           <button id="attack">Attack</button>
       </div>
+    </div>
+
+    <div id="gameOverModal" class="modal">
+      <div>
+          <h2>Game Over!!</h2>
+          <p></p>
+          <p></p>
+          <button>New Game</button>
+      </div>
+    </div>
+
     <script src="./js/board.js"></script>
   </body>
 </html>

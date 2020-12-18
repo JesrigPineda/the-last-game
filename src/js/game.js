@@ -30,11 +30,6 @@ export default class Game {
       tile.innerHTML = "";
       tile.removeAttribute("class");
     }
-  }
-
-  newGame = () => {
-    this.reset();
-
 
     for (const player of this.players) {
       
@@ -49,12 +44,17 @@ export default class Game {
       this.placeItem(player, 'player')
     
     }
-    
-    for (let index = 0; index < 15; index++) {
+
+    for (let index = 0; index < 10; index++) {
       this.placeItem(`<img src="${tower}"/>`, 'obstacle')
     }
     this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
     this.placeItem(`<img src="${gun}" data-damage="20" />`, 'weapon')
+  }
+
+  newGame = () => {
+    this.reset();
+
 
     this.currentPlayer = this.players[Math.floor(Math.random()*this.players.length)]
 
@@ -233,10 +233,6 @@ export default class Game {
   }
 
   detectFight = () => {
-    if(true) return true;
-  }
-
-  detectFight = () => {
 
     const row = Number(this.currentPlayer.position.row);
     const column = Number(this.currentPlayer.position.column);
@@ -258,46 +254,75 @@ export default class Game {
 
   fight = () => {
 
+    const attacker = this.currentPlayer;
+    this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
+    const opponent = this.currentPlayer;
 
-    console.log('Start a fight...');
+    document.querySelector(`#player${attacker.id}`).classList.remove("current");
+    document.querySelector(`#player${opponent.id}`).classList.add("current");
 
-    document.querySelector('#fightModal').classList.add('open'); 
-    document.querySelector('#avatar').innerHTML = this.currentPlayer.id === 1 ? this.players[1].avatar : this.players[0].avatar; 
+
+    const fightModal = document.querySelector('#fightModal');
+    
+    setTimeout(() => {fightModal.classList.add('open')}, 500);
+
+    document.querySelector('#avatar').innerHTML = opponent.avatar
+
+
+
 
     document.querySelector('#defend').addEventListener('click', () => {
-      const attacker = this.currentPlayer;
-      this.changeTurn();
-      const opponent = this.currentPlayer;
 
-      document.querySelector('#fightModal').classList.remove('open'); 
-      document.querySelector(`#p${opponent.id}-shield-status`).classList.add('protected'); 
-      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Protected'; 
+      fightModal.classList.remove('open'); 
+      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Protected';
+      document.querySelector(`#p${opponent.id}-shield-image`).classList.add('protecting');
 
-      opponent.shield = true;
 
+      
       const health = opponent.health - attacker.weapon.damage/2;
 
-      opponent.health = health;
+      this.players[opponent.id -1].health = health;
 
       document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
 
-      this.players[opponent.id -1] = opponent;
+      if(this.gameOver(attacker, opponent)) return;
 
-      this.gameOver(health);
+      this.playerMoves();
 
-    })
+    },{once: true})
+
+    document.querySelector('#attack').addEventListener('click', () => {
 
 
+      fightModal.classList.remove('open'); 
+      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Unprotected';
+      document.querySelector(`#p${opponent.id}-shield-image`).classList.remove('protecting');
+
+      
+      const health = opponent.health - attacker.weapon.damage;
+
+      this.players[opponent.id -1].health = health;
+
+      document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
+
+      if(this.gameOver(attacker, opponent)) return;
+
+      this.fight()
+
+    },{once: true})
 
   }
 
-  gameOver = (health) => {
-    if(health <= 99) {
-      document.querySelector('#gameOverModal').classList.add('open'); 
+  gameOver = (attacker, opponent) => {
+    if(opponent.health <= 0) {
+      const gameOverModal = document.querySelector('#gameOverModal');
+      gameOverModal.classList.add('open');
+
+      document.querySelector('#gameOverModal p:first-of-type').innerHTML = `${attacker.name}, you have won the game :)`;
+      document.querySelector('#gameOverModal p:last-of-type').innerHTML = `${opponent.name}, you have lost the game :(`;
+
+      return true
     }
   }
 
-
-  
-  
 }

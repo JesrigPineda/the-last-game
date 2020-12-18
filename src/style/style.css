@@ -88,7 +88,7 @@ body::-webkit-scrollbar-thumb {
 
 .box {
   background-color: #fff;
-  padding: 20px;
+  padding: 20px 8px;
   margin: 15px;
   border-radius: 10px;
 }
@@ -99,7 +99,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 20px;
   display: block;
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 10px;
   text-transform: uppercase;
 }
 
@@ -213,3 +213,17 @@ body::-webkit-scrollbar-thumb {
   background-color: black;
 
 }
+
+.shield-image {
+  filter: grayscale(1);
+}
+
+.shield-image.protecting {
+  filter: grayscale(0);
+
+}
+
+.shield-image.protecting + .label {
+  background-color: green;
+}
+
