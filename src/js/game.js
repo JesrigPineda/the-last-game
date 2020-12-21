@@ -31,6 +31,10 @@ export default class Game {
       tile.removeAttribute("class");
     }
 
+    for (let index = 0; index < 14; index++) {
+      this.placeItem(`<img src="${tower}"/>`, 'obstacle')
+    }
+
     for (const player of this.players) {
       
       document.querySelector(`#p${player.id}-avatar`).innerHTML = player.avatar;
@@ -45,9 +49,7 @@ export default class Game {
     
     }
 
-    for (let index = 0; index < 10; index++) {
-      this.placeItem(`<img src="${tower}"/>`, 'obstacle')
-    }
+
     this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
     this.placeItem(`<img src="${gun}" data-damage="20" />`, 'weapon')
   }
@@ -63,27 +65,58 @@ export default class Game {
   }
 
   placeItem = (item, type) => {
-    // console.log(this.mapTiles)
     
     const randomNumber = Math.floor(Math.random()*81);
-    if( this.mapTiles[randomNumber].classList.contains("occupied"))
-    {
+    if( this.mapTiles[randomNumber].classList.contains("occupied")) {
+      
       this.placeItem(item,type);
+
     }else {
+
+      // var c = randomSquare.dataset.col - chipmunk.playerPos.col;
+      // var r = randomSquare.dataset.row - chipmunk.playerPos.row;
+      // if ((c > 1 || c < -1) && (r > 1 || r < -1)) 
+
       if(type === 'player') {
-        this.mapTiles[randomNumber].innerHTML = item.avatar;
+        
+        
 
         const {row, column} = this.mapTiles[randomNumber].dataset
+        
 
+        if(this.players[0].position.column > 0) {
+          if(this.detectDistance(Number(row), Number(column), Number(this.players[1].position.row), Number(this.players[1].position.column))) {
+            console.log('matched.')
+            return this.placeItem(item, type)
+         
+          }
+        }
+
+        this.mapTiles[randomNumber].innerHTML = item.avatar;
         this.players[item.id - 1].position = {row, column};
 
-      }else{
-       this.mapTiles[randomNumber].innerHTML = item;
+        
+        this.mapTiles[randomNumber].classList.add("occupied")
+        this.mapTiles[randomNumber].classList.add(type)
 
-      }
+      }else{
+
+       this.mapTiles[randomNumber].innerHTML = item;
        this.mapTiles[randomNumber].classList.add("occupied")
        this.mapTiles[randomNumber].classList.add(type)
+      }
+
+       
+
     }
+  }
+
+  detectDistance = (rA, cA, rB, cB) => {
+
+    if(Math.abs(rA - rB) <= 4) return true;
+    if(Math.abs(cA - cB) <= 4) return true;
+    if(Math.abs(rA - cB) <= 4) return true;
+
   }
 
   detectTurn = () =>{
