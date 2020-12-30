@@ -13,23 +13,24 @@ export default class Game {
     let column = 0;
     let row = 1;
 
+    let output = '';
+
     for (let index = 0; index < 81; index++) {
       column++;
-      document.querySelector('#map').innerHTML += `<div data-row="${row}" data-column="${column}"></div>`;
+      output += `<div data-row="${row}" data-column="${column}"></div>`
 
       if(column === 9) {
         column = 0;
         row++;
       }
     }
+
+    document.querySelector('#map').innerHTML = output;
+
   }
 
   
   reset = () => {
-    for (const tile of this.mapTiles) {
-      tile.innerHTML = "";
-      tile.removeAttribute("class");
-    }
 
     for (let index = 0; index < 14; index++) {
       this.placeItem(`<img src="${tower}"/>`, 'obstacle')
@@ -49,14 +50,12 @@ export default class Game {
     
     }
 
-
     this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
     this.placeItem(`<img src="${gun}" data-damage="20" />`, 'weapon')
   }
 
   newGame = () => {
     this.reset();
-
 
     this.currentPlayer = this.players[Math.floor(Math.random()*this.players.length)]
 
@@ -67,31 +66,35 @@ export default class Game {
   placeItem = (item, type) => {
     
     const randomNumber = Math.floor(Math.random()*81);
+
+
+    
     if( this.mapTiles[randomNumber].classList.contains("occupied")) {
       
       this.placeItem(item,type);
 
     }else {
 
-      // var c = randomSquare.dataset.col - chipmunk.playerPos.col;
-      // var r = randomSquare.dataset.row - chipmunk.playerPos.row;
-      // if ((c > 1 || c < -1) && (r > 1 || r < -1)) 
-
       if(type === 'player') {
         
-        
+        const {row, column} = this.mapTiles[randomNumber].dataset;
 
-        const {row, column} = this.mapTiles[randomNumber].dataset
-        
-
-        if(this.players[0].position.column > 0) {
-          if(this.detectDistance(Number(row), Number(column), Number(this.players[1].position.row), Number(this.players[1].position.column))) {
-            console.log('matched.')
-            return this.placeItem(item, type)
-         
+          if(this.detectPlayerDistance(Number(row), Number(column))) {
+            console.log('matched.');
+            return this.placeItem(item, type);
           }
-        }
 
+          if(this.detectObstacle(Number(row), Number(column))) {
+            console.log('matched.');
+            return this.placeItem(item, type);
+          } 
+          // if(this.players[0].position.column > 0) {
+          // if(this.detectDistance(Number(row), Number(column), Number(this.players[1].position.row), Number(this.players[1].position.column))) {
+          //   console.log('matched.')
+          //   return this.placeItem(item, type)
+         
+          // }}
+  
         this.mapTiles[randomNumber].innerHTML = item.avatar;
         this.players[item.id - 1].position = {row, column};
 
@@ -100,25 +103,90 @@ export default class Game {
         this.mapTiles[randomNumber].classList.add(type)
 
       }else{
-
-       this.mapTiles[randomNumber].innerHTML = item;
-       this.mapTiles[randomNumber].classList.add("occupied")
-       this.mapTiles[randomNumber].classList.add(type)
+        this.mapTiles[randomNumber].innerHTML = item;
+        this.mapTiles[randomNumber].classList.add("occupied")
+        this.mapTiles[randomNumber].classList.add(type)
       }
-
-       
-
     }
   }
 
-  detectDistance = (rA, cA, rB, cB) => {
+  detectPlayerDistance = (row, column) => {
 
-    if(Math.abs(rA - rB) <= 4) return true;
-    if(Math.abs(cA - cB) <= 4) return true;
-    if(Math.abs(rA - cB) <= 4) return true;
+    let rowMin = row - 1;
+    let columnMin = column - 1;
+    let rowMax = row + 1;
+    let columnMax = column + 1;
+
+    // for (let index = 0; index < 14; index++) 
+    for(let i = columnMin ; i <= columnMax; i++){
+      for(let j = rowMin; j <= rowMax; j++){
+        
+        console.log(j,i);
+
+        if ((this.players[0].position.row > 0) && (this.players[0].position.column > 0)){
+          if((Number(j) === Number(this.players[0].position.row)) && (Number(i) === Number(this.players[0].position.column))) {
+            
+            return true;
+          
+          }
+        }
+
+      }
+      
+    }
+
 
   }
 
+  detectObstacle = (row, column) => {
+
+    let up = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
+    let left = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
+    let down = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
+    let right = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
+
+    console.log(up,left,down,right);
+    if( up != null){
+        if(up.classList.contains("obstacle")){
+                console.log("up Si");
+        return true;
+        }
+      }
+
+    if( left != null){
+      if(left.classList.contains("obstacle")){
+              console.log("left Si");
+      return true;
+      }
+    }
+      
+    if( down != null){
+        if(down.classList.contains("obstacle")){
+                console.log("down Si");
+        return true;
+        }
+      }
+
+    if( right != null){
+      if(right.classList.contains("obstacle")){
+              console.log("right Si");
+      return true;
+      }
+    }
+
+            return false;
+
+  }
+
+  // detectDistance = (rA, cA, rB, cB) => {
+
+
+  //   if(Math.abs(rA - rB) <= 4) return true;
+  //   if(Math.abs(cA - cB) <= 4) return true;
+  //   if(Math.abs(rA - cB) <= 4) return true;
+
+  // }
+  
   detectTurn = () =>{
     //console.log(this.currentPlayer);
     //document.querySelector(`.panel.current`).classList.remove("current");

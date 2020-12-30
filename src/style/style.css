@@ -22,10 +22,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 .header {
-  margin: 10px;
-  display: grid;
+  margin: 240px;
   text-align: center;
   justify-content: center;
+}
+
+.header.animation {
+  margin: 5px;
+  transform: translateY(-5px) scale(1);
+  transition: all 0.5s ease;
 }
 
 .button-newGame {
@@ -55,6 +60,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .board {
+  display: none;
   margin-top: 20px;
   margin-bottom: 3em;
 }
