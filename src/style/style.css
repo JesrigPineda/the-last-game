@@ -33,20 +33,7 @@ body::-webkit-scrollbar-thumb {
   transition: all 0.5s ease;
 }
 
-.button-newGame {
-  margin: 10px;
-  color: white;
-  font-weight: 800;
-  font-size: 15px;
-  padding: 10px 25px;
-  background: black;
-  border: 1px solid #fff;
-  border-radius: 20px;
-  outline: none;
-  cursor: pointer;
-}
-
-.button-rules {
+.button {
   margin: 10px;
   color: white;
   font-weight: 800;
@@ -175,7 +162,6 @@ body::-webkit-scrollbar-thumb {
 .modal ul {
   margin: 20px;
   padding: 0;
-  list-style-type: none;
 }
 
 .modal ul li {

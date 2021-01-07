@@ -1,4 +1,4 @@
-import { shield, tower, gun, axe} from './assets';
+import { shield, tower, ancientSword, mace, gun, axe} from './assets';
 
 export default class Game {
 
@@ -28,11 +28,10 @@ export default class Game {
     document.querySelector('#map').innerHTML = output;
 
   }
-
   
   reset = () => {
 
-    for (let index = 0; index < 14; index++) {
+    for (let index = 0; index < 12; index++) {
       this.placeItem(`<img src="${tower}"/>`, 'obstacle')
     }
 
@@ -51,7 +50,9 @@ export default class Game {
     }
 
     this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
-    this.placeItem(`<img src="${gun}" data-damage="20" />`, 'weapon')
+    this.placeItem(`<img src="${ancientSword}" data-damage="20" />`, 'weapon')
+    this.placeItem(`<img src="${mace}" data-damage="25" />`, 'weapon')
+    this.placeItem(`<img src="${gun}" data-damage="30" />`, 'weapon')
   }
 
   newGame = () => {
@@ -66,7 +67,7 @@ export default class Game {
   placeItem = (item, type) => {
     
     const randomNumber = Math.floor(Math.random()*81);
-
+    const {row, column} = this.mapTiles[randomNumber].dataset;
 
     
     if( this.mapTiles[randomNumber].classList.contains("occupied")) {
@@ -74,27 +75,16 @@ export default class Game {
       this.placeItem(item,type);
 
     }else {
-
+       
       if(type === 'player') {
-        
-        const {row, column} = this.mapTiles[randomNumber].dataset;
 
+        if(this.players[0].position.row > 0) {
           if(this.detectPlayerDistance(Number(row), Number(column))) {
-            console.log('matched.');
+            // console.log('matched.');
             return this.placeItem(item, type);
           }
+        }
 
-          if(this.detectObstacle(Number(row), Number(column))) {
-            console.log('matched.');
-            return this.placeItem(item, type);
-          } 
-          // if(this.players[0].position.column > 0) {
-          // if(this.detectDistance(Number(row), Number(column), Number(this.players[1].position.row), Number(this.players[1].position.column))) {
-          //   console.log('matched.')
-          //   return this.placeItem(item, type)
-         
-          // }}
-  
         this.mapTiles[randomNumber].innerHTML = item.avatar;
         this.players[item.id - 1].position = {row, column};
 
@@ -103,6 +93,14 @@ export default class Game {
         this.mapTiles[randomNumber].classList.add(type)
 
       }else{
+
+        if(type === 'obstacle'){
+
+          if(this.detectObstacle(Number(row), Number(column))) {
+            //console.log('detectObstacle: matched.');
+            return this.placeItem(item, type);
+          } 
+        }
         this.mapTiles[randomNumber].innerHTML = item;
         this.mapTiles[randomNumber].classList.add("occupied")
         this.mapTiles[randomNumber].classList.add(type)
@@ -112,81 +110,125 @@ export default class Game {
 
   detectPlayerDistance = (row, column) => {
 
-    let rowMin = row - 1;
-    let columnMin = column - 1;
-    let rowMax = row + 1;
-    let columnMax = column + 1;
 
-    // for (let index = 0; index < 14; index++) 
-    for(let i = columnMin ; i <= columnMax; i++){
-      for(let j = rowMin; j <= rowMax; j++){
-        
-        console.log(j,i);
+    // const p1r = Number(this.players[0].position.row);
+    // const p1c = Number(this.players[0].position.column);
 
-        if ((this.players[0].position.row > 0) && (this.players[0].position.column > 0)){
-          if((Number(j) === Number(this.players[0].position.row)) && (Number(i) === Number(this.players[0].position.column))) {
-            
-            return true;
-          
-          }
-        }
+    // Call Stack se llena, y da error por llegar al limite
+    // Si el jugador 1 esta en la fila 5 o columna 5 estara intentando posicionar hasta que sea mayor a 4
+    // Maximum call stack size exceeded
+      // if(Math.abs(p1r - row) <= 4 && Math.abs(p1c - column) <= 4) {
+      //   // console.log(p1r, row);
+      //   console.log('detectPlayer: row.' + Math.abs(p1r - row));
+      //   console.log('detectPlayer: column.' +Math.abs(p1c - column));
+      //   return true;
+      // }
+      // if(Math.abs(p1c - column) <= 4) {
+      //   // console.log(p1c, column);
+      //   // console.log('detectPlayer: column.' +Math.abs(p1c - column));
+      //   return true;
+      // }
 
-      }
-      
+    // return;
+
+    // Verifico que en las esquinas del jugador 2 no se encuentre el jugador 1
+    const northWest = document.querySelector(`[data-row="${row - 1}"][data-column="${column - 1}"]`);
+    const northEast = document.querySelector(`[data-row="${row - 1}"][data-column="${column + 1}"]`);
+    const southWest = document.querySelector(`[data-row="${row + 1}"][data-column="${column - 1}"]`);
+    const southEast = document.querySelector(`[data-row="${row + 1}"][data-column="${column + 1}"]`);
+
+    //console.log(northWest,northEast,southWest,southEast);
+
+    if(northWest && northWest.classList.contains("player") || northEast && northEast.classList.contains("player") || southWest && southWest.classList.contains("player") || southEast && southEast.classList.contains("player")) 
+    {
+      return true;
     }
 
+    // north
+    for (let i = 1; i <= 4; i++) {
+      let north = document.querySelector(`[data-row="${row - i}"][data-column="${column}"]`);
+      //console.log(north);
+      if(north && north.classList.contains("player")) {
+          return true;      
+      }
+    }
+    
+    //south
+    for (let i = 1; i <= 4; i++) {
+      let south = document.querySelector(`[data-row="${row + i}"][data-column="${column}"]`);
+      //console.log(south);
+      if(south && south.classList.contains("player")) {
+        return true;      
+      }
+    }
+    
+    //east 
+    for (let i = 1; i <= 4; i++) {
+      let east = document.querySelector(`[data-row="${row}"][data-column="${column + i}"]`);
+      //console.log(east);
+      if(east && east.classList.contains("player")) {
+        return true;      
+      }
+    }
 
+    //west
+    for (let i = 1; i <= 4; i++) {
+      let west = document.querySelector(`[data-row="${row}"][data-column="${column - i}"]`);
+      //console.log(west);
+      if(west && west.classList.contains("player")) {
+        return true;      
+      }
+    } 
   }
 
   detectObstacle = (row, column) => {
 
-    let up = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
-    let left = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
-    let down = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
-    let right = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
-
-    console.log(up,left,down,right);
-    if( up != null){
-        if(up.classList.contains("obstacle")){
-                console.log("up Si");
-        return true;
-        }
-      }
-
-    if( left != null){
-      if(left.classList.contains("obstacle")){
-              console.log("left Si");
-      return true;
-      }
-    }
+    // for(let i = 1; i <= 2; i++ ){
       
-    if( down != null){
-        if(down.classList.contains("obstacle")){
-                console.log("down Si");
-        return true;
-        }
-      }
+    //   const r1 = document.querySelector(`[data-row="${row - i}"][data-column="${column}"]`);
+    //   const r2 = document.querySelector(`[data-row="${row + i}"][data-column="${column}"]`);
 
-    if( right != null){
-      if(right.classList.contains("obstacle")){
-              console.log("right Si");
+    //   const c1 = document.querySelector(`[data-row="${row}"][data-column="${column - i}"]`);
+    //   const c2 = document.querySelector(`[data-row="${row}"][data-column="${column + i}"]`);
+
+    //   if(r1 && r1.classList.contains("obstacle") || r2 && r2.classList.contains("obstacle")) {
+    //     console.log(r1,r2);
+    //     return true
+    //   }
+
+    //   if(c1 && c1.classList.contains("obstacle") || c2 && c2.classList.contains("obstacle")) {
+    //     console.log(c1,c2);
+    //     return true
+    //   }
+    // }
+   
+
+    // return;
+
+    // Verifico las esquinas
+    const northWest = document.querySelector(`[data-row="${row - 1}"][data-column="${column - 1}"]`);
+    const northEast = document.querySelector(`[data-row="${row - 1}"][data-column="${column + 1}"]`);
+    const southWest = document.querySelector(`[data-row="${row + 1}"][data-column="${column - 1}"]`);
+    const southEast = document.querySelector(`[data-row="${row + 1}"][data-column="${column + 1}"]`);
+
+    if(northWest && northWest.classList.contains("obstacle") || northEast && northEast.classList.contains("obstacle") || southWest && southWest.classList.contains("obstacle") || southEast && southEast.classList.contains("obstacle")) 
+    {
       return true;
-      }
     }
+
+    const up = document.querySelector(`[data-row="${row - 1}"][data-column="${column}"]`);
+    const left = document.querySelector(`[data-row="${row}"][data-column="${column - 1}"]`);
+    const down = document.querySelector(`[data-row="${row + 1}"][data-column="${column}"]`);
+    const right = document.querySelector(`[data-row="${row}"][data-column="${column + 1}"]`);
+
+    if( up && up.classList.contains("obstacle") || left && left.classList.contains("obstacle") || down && down.classList.contains("obstacle") || right && right.classList.contains("obstacle")){
+        return true;   
+      }
 
             return false;
 
   }
 
-  // detectDistance = (rA, cA, rB, cB) => {
-
-
-  //   if(Math.abs(rA - rB) <= 4) return true;
-  //   if(Math.abs(cA - cB) <= 4) return true;
-  //   if(Math.abs(rA - cB) <= 4) return true;
-
-  // }
-  
   detectTurn = () =>{
     //console.log(this.currentPlayer);
     //document.querySelector(`.panel.current`).classList.remove("current");
@@ -355,9 +397,15 @@ export default class Game {
 
   fight = () => {
 
+    document.getElementById('startAudio').pause();
+    document.getElementById('fightAudio').play();
+    document.getElementById('fightAudio').volume = 0.2;
+
     const attacker = this.currentPlayer;
-    this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
-    const opponent = this.currentPlayer;
+    const opponent = attacker.id === 1 ? this.players[1] : this.players[0];
+    console.log(attacker,opponent);
+    //this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
+    //const opponent = this.currentPlayer;
 
     document.querySelector(`#player${attacker.id}`).classList.remove("current");
     document.querySelector(`#player${opponent.id}`).classList.add("current");
@@ -367,40 +415,86 @@ export default class Game {
     
     setTimeout(() => {fightModal.classList.add('open')}, 500);
 
-    document.querySelector('#avatar').innerHTML = opponent.avatar
+    document.querySelector('#avatar').innerHTML = opponent.avatar;
+    document.querySelector('#attacker').innerHTML = attacker.name;
+    document.querySelector('#avatar-name').innerHTML = opponent.name;
+    document.querySelector('#avatar-health').innerHTML = opponent.health;
 
+    // document.querySelector(`#p${attacker.id}-shield-status`).innerHTML = 'Unprotected';
+    // document.querySelector(`#p${attacker.id}-shield-image`).classList.remove('protecting');
 
+    const retreat = () => {
 
-
-    document.querySelector('#defend').addEventListener('click', () => {
+      document.querySelector('#defend').removeEventListener('click', defend);
+      document.querySelector('#attack').removeEventListener('click', attack);
 
       fightModal.classList.remove('open'); 
-      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Protected';
-      document.querySelector(`#p${opponent.id}-shield-image`).classList.add('protecting');
 
-
+      const health = attacker.health - (opponent.weapon.damage/2);
       
-      const health = opponent.health - attacker.weapon.damage/2;
+      this.players[attacker.id -1].health = health;
 
-      this.players[opponent.id -1].health = health;
-
-      document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
+      document.querySelector(`#p${attacker.id}-health`).innerHTML = health; 
 
       if(this.gameOver(attacker, opponent)) return;
+
+      document.getElementById('fightAudio').pause();
+      document.getElementById('fightAudio').currentTime = 0;
+      document.getElementById('startAudio').play();
 
       this.playerMoves();
 
-    },{once: true})
+    }
 
-    document.querySelector('#attack').addEventListener('click', () => {
+    const defend = () => {
 
+      document.querySelector('#retreat').removeEventListener('click', retreat);
+      document.querySelector('#attack').removeEventListener('click', attack);
 
       fightModal.classList.remove('open'); 
-      document.querySelector(`#p${opponent.id}-shield-status`).innerHTML = 'Unprotected';
-      document.querySelector(`#p${opponent.id}-shield-image`).classList.remove('protecting');
-
       
-      const health = opponent.health - attacker.weapon.damage;
+      document.querySelector(`#p${attacker.id}-shield-status`).innerHTML = 'Protected';
+      document.querySelector(`#p${attacker.id}-shield-image`).classList.add('protecting');
+
+      this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
+      this.fight()
+      // const health = opponent.health - attacker.weapon.damage/2;
+
+      // this.players[opponent.id -1].health = health;
+
+      // document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
+
+      // if(this.gameOver(attacker, opponent)) return;
+
+      // document.getElementById('fightAudio').pause();
+      // document.getElementById('fightAudio').currentTime = 0;
+      // document.getElementById('startAudio').play();
+
+      // this.playerMoves();
+
+    }
+
+    const attack = () => {
+
+      document.querySelector('#retreat').removeEventListener('click', retreat);
+      document.querySelector('#defend').removeEventListener('click', defend);
+
+      fightModal.classList.remove('open'); 
+     
+      document.querySelector(`#p${attacker.id}-shield-status`).innerHTML = 'Unprotected';
+      document.querySelector(`#p${attacker.id}-shield-image`).classList.remove('protecting');
+      
+      let health = opponent.health;
+      
+      if(document.querySelector(`#p${opponent.id}-shield-image`).classList.contains("protecting"))
+      {
+        health = health - attacker.weapon.damage/2;
+        console.log("Protected");
+      }else
+      {
+         health = health - attacker.weapon.damage;
+         console.log("No Protected");
+      }
 
       this.players[opponent.id -1].health = health;
 
@@ -408,14 +502,25 @@ export default class Game {
 
       if(this.gameOver(attacker, opponent)) return;
 
+      this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
       this.fight()
 
-    },{once: true})
+    }
+
+    document.querySelector('#retreat').addEventListener('click', retreat,{once: true})
+
+    document.querySelector('#defend').addEventListener('click', defend, {once: true})
+
+    document.querySelector('#attack').addEventListener('click', attack,{once: true})
 
   }
 
   gameOver = (attacker, opponent) => {
     if(opponent.health <= 0) {
+
+      document.getElementById('fightAudio').pause();
+      document.getElementById('fightAudio').currentTime = 0;
+
       const gameOverModal = document.querySelector('#gameOverModal');
       gameOverModal.classList.add('open');
 

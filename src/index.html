@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project 6</title>
+    <title>The Last Game</title>
+    <link rel="icon" type="image/svg?size" href="https://icongr.am/material/meteor.svg?size=16&color=ffffff" />
     <link rel="stylesheet" href="./style/style.css" />
   </head>
   <body>
     <header class="header">
       <h1>The Last Game</h1>
       <div>
-          <button id="newGame" class="button-newGame" type="button">New Game</button>
-          <button id="rulesBtn" class="button-rules" type="button">Rules</button>
+          <button id="newGame" class="button" type="button">New Game</button>
+          <button id="rulesBtn" class="button" type="button">Rules</button>
+          <button id="playSound" class="button"><img id="sound" src="https://icongr.am/material/volume-high.svg?size=17&color=ffffff" alt=""></button>
+
       </div>
 
     </header>
@@ -68,25 +71,37 @@
     <div id="rulesModal" class="modal">
       <div>
         <button id="closeRules">&times;</button>
-        <h2>Game Rules</h2> 
+        <h2>Movement rules</h2> 
         <ul>
-          <li>You can move a maximum  one to three boxes (horizontally or vertically) before ending your turn..</li>
-          <li>You can collect weapons and increase your damage score.</li>
-          <li>The aim of the game is to gain a high weapon damage score and attack the other player.</li>
-          <li>Once you are next to them you can attack or defend.</li>
+          <li>Movement takes place in turns.</li>
+          <li>For each turn, player can move from 1 to 3 boxes (horizontally or vertically) before ending their turn.</li>
+          <li>If player passes over a box containing a weapon, he leave his current weapon on site and replace it with the new one.</li>
+          <li>If players cross over adjacent squares (horizontally or vertically), a battle begins.</li>
+        </ul>
+        <h2>Battle rules</h2> 
+        <ul>
+          <li>Each player attacks in turn.</li>
+          <li>Damage depends on the player's weapon.</li>
+          <li>Player can choose to attack or defend against the next shot.</li>
+          <li>If the player chooses to defend themselves, they sustain 50% less damage than normal.</li>
+          <li>As soon as life points of a player (initially 100) falls to 0, game is over.</li>
         </ul>
       </div>
     </div>
   
     <div id="fightModal" class="modal">
       <div>
-          <h2>You are in a Fight!</h2>
+          <h3 id="attacker">You are in a fight against!</h3>
+          <h2>You are in a fight against!</h2>
           <div id="avatar"></div>
-
-          <p>Defend: your health is going to be decreased by a 50%</p>
-          <p>Attack: you are going to receive a full damage</p>
-          <button id="defend">Defend</button>
-          <button id="attack">Attack</button>
+          <h4 id="avatar-name"></h4>
+          <p id="avatar-health"></p>
+          <br>
+          <!-- <p>Defend: your health is going to be decreased by a 50%</p>
+          <p>Attack: you are going to receive a full damage</p> -->
+          <button id="retreat"><img src="https://icongr.am/material/walk.svg?size=16&color=ffffff" alt=""> Retreat</button>
+          <button id="defend"><img src="https://icongr.am/material/shield.svg?size=16&color=ffffff" alt=""> Defend</button>
+          <button id="attack"> <img src="https://icongr.am/material/sword-cross.svg?size=16&color=ffffff" alt=""> Attack</button>
       </div>
     </div>
 
@@ -95,9 +110,12 @@
           <h2>Game Over!!</h2>
           <p></p>
           <p></p>
-          <button>New Game</button>
+          <button class="button">New Game</button>
       </div>
     </div>
+
+    <audio id="startAudio" src="./music/End_of_the_Era.mp3"></audio>
+    <audio id="fightAudio" src="./music/Nightmares.mp3"></audio>
 
     <script src="./js/board.js"></script>
   </body>
