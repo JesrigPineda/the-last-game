@@ -83,7 +83,8 @@
           <li>Each player attacks in turn.</li>
           <li>Damage depends on the player's weapon.</li>
           <li>Player can choose to attack or defend against the next shot.</li>
-          <li>If the player chooses to defend themselves, they sustain 50% less damage than normal.</li>
+          <li>If the player chooses to defend, he will take 50% less damage than normal the next turn.</li>
+          <li>If the player chooses to retreat, he will take a 75% damage attack from his enemy and will be able to move again.</li>
           <li>As soon as life points of a player (initially 100) falls to 0, game is over.</li>
         </ul>
       </div>
@@ -97,9 +98,10 @@
           <h4 id="avatar-name"></h4>
           <p id="avatar-health"></p>
           <br>
-          <!-- <p>Defend: your health is going to be decreased by a 50%</p>
-          <p>Attack: you are going to receive a full damage</p> -->
-          <button id="retreat"><img src="https://icongr.am/material/walk.svg?size=16&color=ffffff" alt=""> Retreat</button>
+          <p><strong>Attack:</strong> you are going to receive a full damage</p>
+          <p><strong>Defend:</strong> you will take 50% less damage than normal the next turn.</p>
+          <p><strong>Retreat:</strong>  you will take a 75% damage attack from your enemy and can move again.</p>
+          <button id="retreat"><img src="https://icongr.am/material/walk.svg?size=16&color=ffffff" alt="Retirarse"> Retreat</button>
           <button id="defend"><img src="https://icongr.am/material/shield.svg?size=16&color=ffffff" alt=""> Defend</button>
           <button id="attack"> <img src="https://icongr.am/material/sword-cross.svg?size=16&color=ffffff" alt=""> Attack</button>
       </div>

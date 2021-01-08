@@ -49,10 +49,10 @@ export default class Game {
     
     }
 
-    this.placeItem(`<img src="${axe}" data-damage="15" />`, 'weapon')
-    this.placeItem(`<img src="${ancientSword}" data-damage="20" />`, 'weapon')
-    this.placeItem(`<img src="${mace}" data-damage="25" />`, 'weapon')
-    this.placeItem(`<img src="${gun}" data-damage="30" />`, 'weapon')
+    this.placeItem(`<img src="${axe}" data-damage="20" />`, 'weapon')
+    this.placeItem(`<img src="${ancientSword}" data-damage="30" />`, 'weapon')
+    this.placeItem(`<img src="${mace}" data-damage="35" />`, 'weapon')
+    this.placeItem(`<img src="${gun}" data-damage="40" />`, 'weapon')
   }
 
   newGame = () => {
@@ -430,7 +430,7 @@ export default class Game {
 
       fightModal.classList.remove('open'); 
 
-      const health = attacker.health - (opponent.weapon.damage/2);
+      const health = attacker.health - ((opponent.weapon.damage * 75)/100);
       
       this.players[attacker.id -1].health = health;
 
@@ -489,11 +489,9 @@ export default class Game {
       if(document.querySelector(`#p${opponent.id}-shield-image`).classList.contains("protecting"))
       {
         health = health - attacker.weapon.damage/2;
-        console.log("Protected");
       }else
       {
          health = health - attacker.weapon.damage;
-         console.log("No Protected");
       }
 
       this.players[opponent.id -1].health = health;
@@ -503,16 +501,17 @@ export default class Game {
       if(this.gameOver(attacker, opponent)) return;
 
       this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
-      this.fight()
+      this.fight();
 
     }
 
+    // I add option "once" in method options object to perform event callback and run only once
     document.querySelector('#retreat').addEventListener('click', retreat,{once: true})
 
     document.querySelector('#defend').addEventListener('click', defend, {once: true})
 
     document.querySelector('#attack').addEventListener('click', attack,{once: true})
-
+    
   }
 
   gameOver = (attacker, opponent) => {
