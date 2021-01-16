@@ -1,4 +1,4 @@
-import { shield, tower, ancientSword, mace, gun, axe} from './assets';
+import { shield, tower, ancientSword, mace, axe} from './assets';
 
 export default class Game {
 
@@ -49,10 +49,10 @@ export default class Game {
     
     }
 
-    this.placeItem(`<img src="${axe}" data-damage="20" />`, 'weapon')
-    this.placeItem(`<img src="${ancientSword}" data-damage="30" />`, 'weapon')
+    this.placeItem(`<img src="${axe}" data-damage="20" />`, 'weapon');
+    this.placeItem(`<img src="${ancientSword}" data-damage="30" />`, 'weapon');
     this.placeItem(`<img src="${mace}" data-damage="35" />`, 'weapon')
-    this.placeItem(`<img src="${gun}" data-damage="40" />`, 'weapon')
+  
   }
 
   newGame = () => {
@@ -80,7 +80,7 @@ export default class Game {
 
         if(this.players[0].position.row > 0) {
           if(this.detectPlayerDistance(Number(row), Number(column))) {
-            // console.log('matched.');
+            
             return this.placeItem(item, type);
           }
         }
@@ -97,7 +97,7 @@ export default class Game {
         if(type === 'obstacle'){
 
           if(this.detectObstacle(Number(row), Number(column))) {
-            //console.log('detectObstacle: matched.');
+            
             return this.placeItem(item, type);
           } 
         }
@@ -111,101 +111,55 @@ export default class Game {
   detectPlayerDistance = (row, column) => {
 
 
-    // const p1r = Number(this.players[0].position.row);
-    // const p1c = Number(this.players[0].position.column);
+    const p1r = Number(this.players[0].position.row);
+    const p1c = Number(this.players[0].position.column);
 
-    // Call Stack se llena, y da error por llegar al limite
-    // Si el jugador 1 esta en la fila 5 o columna 5 estara intentando posicionar hasta que sea mayor a 4
-    // Maximum call stack size exceeded
-      // if(Math.abs(p1r - row) <= 4 && Math.abs(p1c - column) <= 4) {
-      //   // console.log(p1r, row);
-      //   console.log('detectPlayer: row.' + Math.abs(p1r - row));
-      //   console.log('detectPlayer: column.' +Math.abs(p1c - column));
-      //   return true;
-      // }
-      // if(Math.abs(p1c - column) <= 4) {
-      //   // console.log(p1c, column);
-      //   // console.log('detectPlayer: column.' +Math.abs(p1c - column));
-      //   return true;
-      // }
+    const yDistance = Math.abs(p1r - row);
+    const xDistance = Math.abs(p1c - column)
 
-    // return;
+    // Check if P1 is in same column and less than 4 steps away from P2
+    if(p1c === column && yDistance <= 4) {
+      // Check if there's a obstacle between two players
+      for (let i = 1; i <= yDistance; i++) {
+        if(p1r > row) {
+          const y = document.querySelector(`[data-row="${p1r - i}"][data-column="${p1c}"]`);
 
-    // Verifico que en las esquinas del jugador 2 no se encuentre el jugador 1
-    const northWest = document.querySelector(`[data-row="${row - 1}"][data-column="${column - 1}"]`);
-    const northEast = document.querySelector(`[data-row="${row - 1}"][data-column="${column + 1}"]`);
-    const southWest = document.querySelector(`[data-row="${row + 1}"][data-column="${column - 1}"]`);
-    const southEast = document.querySelector(`[data-row="${row + 1}"][data-column="${column + 1}"]`);
+          if(y && y.classList.contains("obstacle")) return false  
+        }else{
+          const y = document.querySelector(`[data-row="${p1r + i}"][data-column="${p1c}"]`);
 
-    //console.log(northWest,northEast,southWest,southEast);
+          if(y && y.classList.contains("obstacle")) return false
+        }
+      }
 
-    if(northWest && northWest.classList.contains("player") || northEast && northEast.classList.contains("player") || southWest && southWest.classList.contains("player") || southEast && southEast.classList.contains("player")) 
-    {
       return true;
     }
 
-    // north
-    for (let i = 1; i <= 4; i++) {
-      let north = document.querySelector(`[data-row="${row - i}"][data-column="${column}"]`);
-      //console.log(north);
-      if(north && north.classList.contains("player")) {
-          return true;      
+    // Check if P1 is in same row and less than 4 steps away from P2
+    if(p1r === row && xDistance <= 4) {
+
+      // Check if there's a obstacle between two players
+      for (let i = 1; i <= xDistance; i++) {
+        if(p1c > column) {
+          const x = document.querySelector(`[data-row="${p1r}"][data-column="${p1c - i}"]`);
+
+          if(x && x.classList.contains("obstacle")) return false
+        }else{
+          const x = document.querySelector(`[data-row="${p1r}"][data-column="${p1c + i}"]`);
+
+          if(x && x.classList.contains("obstacle")) return false
+        }
       }
-    }
-    
-    //south
-    for (let i = 1; i <= 4; i++) {
-      let south = document.querySelector(`[data-row="${row + i}"][data-column="${column}"]`);
-      //console.log(south);
-      if(south && south.classList.contains("player")) {
-        return true;      
-      }
-    }
-    
-    //east 
-    for (let i = 1; i <= 4; i++) {
-      let east = document.querySelector(`[data-row="${row}"][data-column="${column + i}"]`);
-      //console.log(east);
-      if(east && east.classList.contains("player")) {
-        return true;      
-      }
+
+      return true;
     }
 
-    //west
-    for (let i = 1; i <= 4; i++) {
-      let west = document.querySelector(`[data-row="${row}"][data-column="${column - i}"]`);
-      //console.log(west);
-      if(west && west.classList.contains("player")) {
-        return true;      
-      }
-    } 
+    if((xDistance === 1 && yDistance <= 3) || (yDistance === 1 && xDistance <= 3)) return true;
   }
 
   detectObstacle = (row, column) => {
 
-    // for(let i = 1; i <= 2; i++ ){
-      
-    //   const r1 = document.querySelector(`[data-row="${row - i}"][data-column="${column}"]`);
-    //   const r2 = document.querySelector(`[data-row="${row + i}"][data-column="${column}"]`);
-
-    //   const c1 = document.querySelector(`[data-row="${row}"][data-column="${column - i}"]`);
-    //   const c2 = document.querySelector(`[data-row="${row}"][data-column="${column + i}"]`);
-
-    //   if(r1 && r1.classList.contains("obstacle") || r2 && r2.classList.contains("obstacle")) {
-    //     console.log(r1,r2);
-    //     return true
-    //   }
-
-    //   if(c1 && c1.classList.contains("obstacle") || c2 && c2.classList.contains("obstacle")) {
-    //     console.log(c1,c2);
-    //     return true
-    //   }
-    // }
-   
-
-    // return;
-
-    // Verifico las esquinas
+    // I check the corners
     const northWest = document.querySelector(`[data-row="${row - 1}"][data-column="${column - 1}"]`);
     const northEast = document.querySelector(`[data-row="${row - 1}"][data-column="${column + 1}"]`);
     const southWest = document.querySelector(`[data-row="${row + 1}"][data-column="${column - 1}"]`);
@@ -230,8 +184,6 @@ export default class Game {
   }
 
   detectTurn = () =>{
-    //console.log(this.currentPlayer);
-    //document.querySelector(`.panel.current`).classList.remove("current");
 
     if(document.querySelector(`.panel.current`)){
       document.querySelector(`.panel.current`).classList.remove("current");
@@ -403,9 +355,6 @@ export default class Game {
 
     const attacker = this.currentPlayer;
     const opponent = attacker.id === 1 ? this.players[1] : this.players[0];
-    console.log(attacker,opponent);
-    //this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
-    //const opponent = this.currentPlayer;
 
     document.querySelector(`#player${attacker.id}`).classList.remove("current");
     document.querySelector(`#player${opponent.id}`).classList.add("current");
@@ -420,9 +369,6 @@ export default class Game {
     document.querySelector('#avatar-name').innerHTML = opponent.name;
     document.querySelector('#avatar-health').innerHTML = opponent.health;
 
-    // document.querySelector(`#p${attacker.id}-shield-status`).innerHTML = 'Unprotected';
-    // document.querySelector(`#p${attacker.id}-shield-image`).classList.remove('protecting');
-
     const retreat = () => {
 
       document.querySelector('#defend').removeEventListener('click', defend);
@@ -430,7 +376,7 @@ export default class Game {
 
       fightModal.classList.remove('open'); 
 
-      const health = attacker.health - ((opponent.weapon.damage * 75)/100);
+      const health = attacker.health - opponent.weapon.damage;
       
       this.players[attacker.id -1].health = health;
 
@@ -458,19 +404,7 @@ export default class Game {
 
       this.currentPlayer = attacker.id === 1 ? this.players[1] : this.players[0];
       this.fight()
-      // const health = opponent.health - attacker.weapon.damage/2;
 
-      // this.players[opponent.id -1].health = health;
-
-      // document.querySelector(`#p${opponent.id}-health`).innerHTML = health; 
-
-      // if(this.gameOver(attacker, opponent)) return;
-
-      // document.getElementById('fightAudio').pause();
-      // document.getElementById('fightAudio').currentTime = 0;
-      // document.getElementById('startAudio').play();
-
-      // this.playerMoves();
 
     }
 
@@ -515,6 +449,7 @@ export default class Game {
   }
 
   gameOver = (attacker, opponent) => {
+
     if(opponent.health <= 0) {
 
       document.getElementById('fightAudio').pause();
@@ -525,6 +460,19 @@ export default class Game {
 
       document.querySelector('#gameOverModal p:first-of-type').innerHTML = `${attacker.name}, you have won the game :)`;
       document.querySelector('#gameOverModal p:last-of-type').innerHTML = `${opponent.name}, you have lost the game :(`;
+
+      return true
+    }
+
+    if(attacker.health <= 0) {
+      document.getElementById('fightAudio').pause();
+      document.getElementById('fightAudio').currentTime = 0;
+
+      const gameOverModal = document.querySelector('#gameOverModal');
+      gameOverModal.classList.add('open');
+
+      document.querySelector('#gameOverModal p:first-of-type').innerHTML = `${opponent.name}, you have won the game :)`;
+      document.querySelector('#gameOverModal p:last-of-type').innerHTML = `${attacker.name}, you have lost the game :(`;
 
       return true
     }

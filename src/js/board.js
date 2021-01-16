@@ -4,7 +4,7 @@ import { allistar, dark, darkSword, sword } from './assets';
 
 Game.mapGenerator();
 
-
+// arrow fuction newGame
 const newGame = () => {
     document.getElementById('startAudio').play();
     document.getElementById('startAudio').volume = 0.3;
