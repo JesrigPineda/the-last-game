@@ -1,4 +1,5 @@
 export default class Player {
+  
   constructor(name, avatar, weapon, lastId = 0) {
     this.name = name;
     this.avatar = avatar;
@@ -6,6 +7,7 @@ export default class Player {
     this.lastId = lastId;
   }
 
+ // to generate the player properties, I go through the abstraction process
   generate = () => {
     return {
       id: this.lastId + 1,

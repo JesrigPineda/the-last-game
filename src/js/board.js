@@ -4,43 +4,45 @@ import { allistar, dark, darkSword, sword } from './assets';
 
 Game.mapGenerator();
 
-// arrow fuction newGame
 const newGame = () => {
+    
     document.getElementById('startAudio').play();
     document.getElementById('startAudio').volume = 0.3;
 
-    document.querySelector('header').classList.add("animation");
-    document.getElementById("board").style.display = "block";
+    $('header').addClass("animation");
+    $("#board").css("display","block");
 
     Game.mapGenerator();
 
+    // If there are modal windows, close them
     for (const modal of document.querySelectorAll('.modal')) {
         modal.classList.remove('open')
     }
 
 
+    // instantiate player 1 and 2
     const playerOne = new Player('Allistar', allistar, sword).generate();
     const playerTwo = new Player('Dark', dark, darkSword, playerOne.id).generate();
-
 
     new Game([playerOne, playerTwo]).newGame();
 
 }
 
 // to start new game
-document.querySelector('#newGame').addEventListener('click', newGame);
-document.querySelector('#gameOverModal button').addEventListener('click', newGame);
+$('#newGame').on('click', newGame);
 
-document.querySelector('#rulesBtn').addEventListener('click', () => {
-    document.querySelector('#rulesModal').classList.add('open');
+$('#gameOverModal button').on('click', newGame);
+
+$('#rulesBtn').on('click', () => {
+    $('#rulesModal').addClass('open');
 });
 
-document.querySelector('#closeRules').addEventListener('click', () => {
-    document.querySelector('#rulesModal').classList.remove('open');
-});
+$('#closeRules').on('click', () => {
+    $('#rulesModal').removeClass('open');
+})
 
-document.querySelector('#playSound').addEventListener('click', () => {
-    
+$('#playSound').on('click', () => {
+
     if(document.getElementById('startAudio').paused){
         document.getElementById('startAudio').play();
         document.getElementById('startAudio').volume = 0.5;
@@ -49,6 +51,7 @@ document.querySelector('#playSound').addEventListener('click', () => {
         document.getElementById('startAudio').pause();
         document.getElementById("sound").src="https://icongr.am/material/volume-low.svg?size=17&color=ffffff";
     }
-});
+})
+
 
 
