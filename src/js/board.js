@@ -3,13 +3,16 @@ import Game from './game.js';
 import { allistar, dark, darkSword, sword } from './assets';
 
 Game.mapGenerator();
-
+let audio = document.getElementById('startAudio');
 const newGame = () => {
     
-    document.getElementById('startAudio').play();
-    document.getElementById('startAudio').volume = 0.3;
+    audio.play();
+    audio.volume = 0.3;
 
+// The addClass () method adds one or more class names to the selected elements.
     $('header').addClass("animation");
+
+// The css () method sets or returns one or more style properties for the selected elements.
     $("#board").css("display","block");
 
     Game.mapGenerator();
@@ -28,7 +31,8 @@ const newGame = () => {
 
 }
 
-// to start new game
+// With on () we can assign events to the DOM elements
+// assign the button newGame
 $('#newGame').on('click', newGame);
 
 $('#gameOverModal button').on('click', newGame);
@@ -43,12 +47,12 @@ $('#closeRules').on('click', () => {
 
 $('#playSound').on('click', () => {
 
-    if(document.getElementById('startAudio').paused){
-        document.getElementById('startAudio').play();
-        document.getElementById('startAudio').volume = 0.5;
+    if(audio.paused){
+        audio.play();
+        audio.volume = 0.5;
         document.getElementById("sound").src="https://icongr.am/material/volume-high.svg?size=17&color=ffffff";
     }else{
-        document.getElementById('startAudio').pause();
+        audio.pause();
         document.getElementById("sound").src="https://icongr.am/material/volume-low.svg?size=17&color=ffffff";
     }
 })

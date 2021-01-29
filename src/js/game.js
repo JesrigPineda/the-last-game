@@ -4,7 +4,7 @@ export default class Game {
 
   constructor(players) {
     this.players = players;
-    this.mapTiles = document.querySelectorAll('#map > div')
+    this.mapTiles = document.querySelectorAll('#map > div');
     this.currentPlayer = null;
     
   }
@@ -503,7 +503,7 @@ export default class Game {
   gameOver = (attacker, opponent) => {
 
 // if the opponent's life is equal to zero, the gamer over modal is activated and it shows who won and who lost also
-     // of a button for a new game
+// of a button for a new game
     if(opponent.health <= 0) {
 
       document.getElementById('fightAudio').pause();
